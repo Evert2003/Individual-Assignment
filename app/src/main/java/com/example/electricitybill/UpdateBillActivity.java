@@ -33,7 +33,7 @@ public class UpdateBillActivity extends AppCompatActivity {
         spinnerMonth.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                Arrays.asList("Jan","Feb","Mar","Apr","May","Jun",
+                Arrays.asList("January","Feb","Mar","Apr","May","Jun",
                         "Jul","Aug","Sep","Oct","Nov","Dec")
         ));
 

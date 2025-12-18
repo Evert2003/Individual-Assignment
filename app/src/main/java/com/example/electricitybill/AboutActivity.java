@@ -18,7 +18,7 @@ public class AboutActivity extends AppCompatActivity {
 
         tvWebsite.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://github.com/YOUR_USERNAME/YOUR_REPO"));
+                    Uri.parse("https://github.com/Evert2003/Individual-Assignment/tree/master"));
             startActivity(intent);
         });
     }

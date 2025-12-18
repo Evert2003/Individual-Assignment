@@ -26,11 +26,12 @@ public class ViewBillActivity extends AppCompatActivity {
         if (c.moveToFirst()) {
             tv.setText(
                     "Month: " + c.getString(1) +
-                            "\nUnits: " + c.getInt(2) +
-                            "\nRebate: " + c.getDouble(3) + "%" +
-                            "\nTotal: RM " + c.getDouble(4) +
-                            "\nFinal: RM " + c.getDouble(5)
+                            "\nUnits (kWh): " + c.getInt(2) +
+                            "\nRebate: " + String.format("%.2f", c.getDouble(3)) + "%" +
+                            "\nTotal cost: RM " + String.format("%.2f", c.getDouble(4)) +
+                            "\nFinal cost after rebate: RM " + String.format("%.2f", c.getDouble(5))
             );
         }
+        c.close();
     }
 }

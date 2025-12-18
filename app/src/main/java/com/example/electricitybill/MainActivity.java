@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,59 +49,63 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("DefaultLocale")
     private void loadListView() {
         Cursor cursor = dbHelper.getAllBills();
-        ArrayList<String> list = new ArrayList<>();
-        ArrayList<BillItem> tempList = new ArrayList<>(); // Temporary list to sort
-        idList.clear();
+        ArrayList<BillItem> billList = new ArrayList<>(); // Include ID
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int billId = cursor.getInt(0);      // assuming ID is at column 0
-                String month = cursor.getString(1); // month column
+                int billId = cursor.getInt(0);      // ID column
+                String month = cursor.getString(1); // month column (short name like "Jan")
                 double finalCost = cursor.getDouble(5); // finalCost column
 
-                idList.add(billId);
-                tempList.add(new BillItem(month, finalCost)); // store for sorting
+                billList.add(new BillItem(billId, month, finalCost));
             } while (cursor.moveToNext());
             cursor.close();
         }
 
-        // Define month order
+        // Define month order (short names to match AddBillActivity)
         final String[] monthOrder = {
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+                "January","February","March","April","May","June",
+                "July","August","September","October","November","December"
         };
+        java.util.List<String> monthList = Arrays.asList(monthOrder);
 
-        // Sort tempList according to month order
-        tempList.sort((b1, b2) -> {
-            int index1 = java.util.Arrays.asList(monthOrder).indexOf(b1.month);
-            int index2 = java.util.Arrays.asList(monthOrder).indexOf(b2.month);
+        // Sort by month
+        billList.sort((b1, b2) -> {
+            int index1 = monthList.indexOf(b1.month);
+            int index2 = monthList.indexOf(b2.month);
             return Integer.compare(index1, index2);
         });
 
-        // Convert sorted tempList to display strings
-        list.clear();
-        for (BillItem item : tempList) {
-            list.add(item.month + " - RM " + String.format("%.2f", item.finalCost));
+        // Populate display list and ID list
+        ArrayList<String> displayList = new ArrayList<>();
+        idList.clear();
+        for (BillItem item : billList) {
+            displayList.add(item.month + " - RM " + String.format("%.2f", item.finalCost));
+            idList.add(item.id); // keep IDs in sorted order
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                list
+                displayList
         );
         listView.setAdapter(adapter);
     }
 
-    // Helper class to hold month and cost
+    // Updated BillItem class
     private static class BillItem {
+        int id;
         String month;
         double finalCost;
 
-        BillItem(String month, double finalCost) {
+        BillItem(int id, String month, double finalCost) {
+            this.id = id;
             this.month = month;
             this.finalCost = finalCost;
         }
     }
+
+
 
 
     private void showActionDialog(int position) {
@@ -115,10 +122,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, UpdateBillActivity.class)
                         .putExtra("ID", billId));
             } else {
-                dbHelper.deleteBill(billId);
-                loadListView();
+                // Show confirmation dialog before deleting
+                new AlertDialog.Builder(this)
+                        .setTitle("Confirm Delete")
+                        .setMessage("Are you sure you want to delete this bill?")
+                        .setPositiveButton("Yes", (confirmDialog, whichButton) -> {
+                            dbHelper.deleteBill(billId);
+                            loadListView();
+                            Toast.makeText(this, "Bill deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
         builder.show();
     }
+
 }

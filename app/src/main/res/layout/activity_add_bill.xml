@@ -105,6 +105,26 @@
             tools:ignore="HardcodedText" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total cost: -"
+        android:textStyle="bold"
+        android:paddingTop="12dp"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tvFinalCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Final cost: -"
+        android:textStyle="bold"
+        android:paddingTop="4dp"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText" />
+
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"

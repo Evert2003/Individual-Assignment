@@ -53,6 +53,11 @@
             android:text="About"
             tools:ignore="HardcodedText" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@android:color/white" />
+
         <TextView
             android:layout_width="366dp"
             android:layout_height="wrap_content"
@@ -63,10 +68,12 @@
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
+
+
         <ListView
             android:id="@+id/listView"
             android:layout_width="396dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="333dp" />
 
     </LinearLayout>
 
