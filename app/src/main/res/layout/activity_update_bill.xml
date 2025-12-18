@@ -1,49 +1,104 @@
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:id="@+id/main"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".UpdateBillActivity">-->
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- Container inside ScrollView -->
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
+        <!-- Top spacer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@android:color/darker_gray" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@android:color/white" />
+
+        <!-- Original LinearLayout content -->
         <LinearLayout
             android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
 
             <Spinner
                 android:id="@+id/spinnerMonth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <EditText
-                android:id="@+id/etUnits"
-                android:hint="Electricity Units (kWh)"
-                android:inputType="number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <TextView
+                android:text="Electricity Units (kWh)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:ignore="HardcodedText" />
 
             <EditText
-                android:id="@+id/etRebate"
-                android:hint="Rebate Percentage (0–5)"
-                android:inputType="numberDecimal"
+                android:id="@+id/etUnits"
+                android:hint="Enter units used"
+                android:inputType="number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:text="Rebate Percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupRebate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0%" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1%"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2%"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3%"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5%"/>
+            </RadioGroup>
 
             <Button
                 android:id="@+id/btnUpdate"
-                android:text="Update Bill"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:text="Update Bill" />
 
         </LinearLayout>
-    </ScrollView>
 
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+    </LinearLayout>
+</ScrollView>

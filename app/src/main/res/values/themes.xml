@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Electricitybill" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Define colors -->
+    <color name="my_primary">#2196F3</color> <!-- blue -->
+    <color name="my_primary_variant">#1976D2</color>
+    <color name="my_secondary">#03DAC5</color> <!-- optional -->
+
+    <!-- Base application theme -->
+    <style name="Theme.Electricitybill" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/my_primary</item>
+        <item name="colorPrimaryVariant">@color/my_primary_variant</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/my_secondary</item>
     </style>
 
-    <style name="Theme.Electricitybill" parent="Base.Theme.Electricitybill" />
 </resources>

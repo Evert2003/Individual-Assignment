@@ -1,5 +1,6 @@
 package com.example.electricitybill;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ public class ViewBillActivity extends AppCompatActivity {
 
     DataHelper dbHelper;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

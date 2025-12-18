@@ -18,6 +18,18 @@ public class DataHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // CHECK IF MONTH EXISTS
+    public boolean monthExists(String month) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(
+                "SELECT id FROM " + TABLE_NAME + " WHERE month = ?",
+                new String[]{month}
+        );
+        boolean exists = c.moveToFirst();
+        c.close();
+        return exists;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -38,9 +50,9 @@ public class DataHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // CREATE
-    public void insertBill(String month, int units, double rebate,
-                           double total, double finalCost) {
+    // INSERT BILL
+    public boolean insertBill(String month, int units, double rebate,
+                              double total, double finalCost) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("month", month);
@@ -48,23 +60,25 @@ public class DataHelper extends SQLiteOpenHelper {
         cv.put("rebate", rebate);
         cv.put("total", total);
         cv.put("final", finalCost);
-        db.insert(TABLE_NAME, null, cv);
+
+        long result = db.insert(TABLE_NAME, null, cv);
+        return result != -1; // return true if insert succeeded
     }
 
-    // READ ALL
+    // GET ALL BILLS
     public Cursor getAllBills() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
     }
 
-    // READ ONE
+    // GET BILL BY ID
     public Cursor getBillById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE id=?",
                 new String[]{String.valueOf(id)});
     }
 
-    // UPDATE
+    // UPDATE BILL
     public void updateBill(int id, String month, int units,
                            double rebate, double total, double finalCost) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -77,7 +91,7 @@ public class DataHelper extends SQLiteOpenHelper {
         db.update(TABLE_NAME, cv, "id=?", new String[]{String.valueOf(id)});
     }
 
-    // DELETE
+    // DELETE BILL
     public void deleteBill(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, "id=?", new String[]{String.valueOf(id)});

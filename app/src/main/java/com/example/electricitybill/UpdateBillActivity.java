@@ -10,7 +10,8 @@ import java.util.Arrays;
 public class UpdateBillActivity extends AppCompatActivity {
 
     Spinner spinnerMonth;
-    EditText etUnits, etRebate;
+    EditText etUnits;
+    RadioGroup radioGroupRebate;
     DataHelper dbHelper;
     int billId;
 
@@ -19,64 +20,67 @@ public class UpdateBillActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_bill);
 
+        setTitle("Update Bill");
+
         spinnerMonth = findViewById(R.id.spinnerMonth);
         etUnits = findViewById(R.id.etUnits);
-        etRebate = findViewById(R.id.etRebate);
+        radioGroupRebate = findViewById(R.id.radioGroupRebate);
         Button btnUpdate = findViewById(R.id.btnUpdate);
 
         dbHelper = new DataHelper(this);
         billId = getIntent().getIntExtra("ID", -1);
 
-        spinnerMonth.setAdapter(new ArrayAdapter<>(this,
+        spinnerMonth.setAdapter(new ArrayAdapter<>(
+                this,
                 android.R.layout.simple_spinner_dropdown_item,
                 Arrays.asList("Jan","Feb","Mar","Apr","May","Jun",
-                        "Jul","Aug","Sep","Oct","Nov","Dec")));
+                        "Jul","Aug","Sep","Oct","Nov","Dec")
+        ));
 
         loadData();
 
         btnUpdate.setOnClickListener(v -> updateData());
     }
 
-
     private void loadData() {
         Cursor c = dbHelper.getBillById(billId);
         if (c.moveToFirst()) {
             etUnits.setText(String.valueOf(c.getInt(2)));
-            etRebate.setText(String.valueOf(c.getDouble(3)));
+
+            double rebate = c.getDouble(3);
+            for (int i = 0; i < radioGroupRebate.getChildCount(); i++) {
+                RadioButton rb = (RadioButton) radioGroupRebate.getChildAt(i);
+                if (rb.getText().toString().equals(rebate + "%")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
         }
         c.close();
     }
 
-
     private void updateData() {
 
         String unitsStr = etUnits.getText().toString().trim();
-        String rebateStr = etRebate.getText().toString().trim();
-
         if (unitsStr.isEmpty()) {
             etUnits.setError("Please enter electricity units");
-            etUnits.requestFocus();
-            return;
-        }
-
-        if (rebateStr.isEmpty()) {
-            etRebate.setError("Please enter rebate percentage");
-            etRebate.requestFocus();
             return;
         }
 
         int units = Integer.parseInt(unitsStr);
-        double rebate = Double.parseDouble(rebateStr);
-
         if (units <= 0) {
             etUnits.setError("Units must be greater than 0");
             return;
         }
 
-        if (rebate < 0 || rebate > 5) {
-            etRebate.setError("Rebate must be between 0 and 5%");
+        int selectedId = radioGroupRebate.getCheckedRadioButtonId();
+        if (selectedId == -1) {
+            Toast.makeText(this, "Please select rebate percentage", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        RadioButton rb = findViewById(selectedId);
+        double rebate = Double.parseDouble(rb.getText().toString().replace("%", ""));
 
         double total = calculateTotalCharge(units);
         double finalCost = total - (total * rebate / 100);
@@ -84,15 +88,16 @@ public class UpdateBillActivity extends AppCompatActivity {
         dbHelper.updateBill(
                 billId,
                 spinnerMonth.getSelectedItem().toString(),
-                units, rebate, total, finalCost
+                units,
+                rebate,
+                total,
+                finalCost
         );
 
         Toast.makeText(this, "Bill updated successfully", Toast.LENGTH_SHORT).show();
-
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
 
     private double calculateTotalCharge(int units) {
         double total = 0;
